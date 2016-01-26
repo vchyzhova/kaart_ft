@@ -12,6 +12,7 @@ public class HomePage extends Page{
 
     public HomePage(WebDriver driver) {
         super(driver);
+        this.driver = driver;
     }
 
     public WebDriver getDriver() {

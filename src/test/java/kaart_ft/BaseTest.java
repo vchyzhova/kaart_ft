@@ -8,6 +8,7 @@ import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.annotations.AfterSuite;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Listeners;
 
@@ -23,53 +24,16 @@ import java.util.concurrent.TimeUnit;
 
         private static WebDriver driver;
 
-
         public void createDriver() {
             //final String username = System.getenv("SAUCE_USER_NAME");
             //final String accessKey = System.getenv("SAUCE_API_KEY");
-            driver = new FirefoxDriver();
-            DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
-            String seleniumBrowser = "firefox";//System.getenv("SELENIUM_BROWSER");
-            if (!Strings.isNullOrEmpty(seleniumBrowser)) {
-                desiredCapabilities.setBrowserName(seleniumBrowser);
-            }
-            final String seleniumVersion = "41";//System.getenv("SELENIUM_VERSION");
-            if (!Strings.isNullOrEmpty(seleniumVersion)) {
-                desiredCapabilities.setVersion(seleniumVersion);
-            }
-
-
-            /*final String username = ConfigProperties.getProperty("SAUCE_USER_NAME");
+            final String username = ConfigProperties.getProperty("SAUCE_USER_NAME");
             final String accessKey = ConfigProperties.getProperty("SAUCE_API_KEY");
-            if (Strings.isNullOrEmpty(username) || Strings.isNullOrEmpty(accessKey)) {
-                driver = new FirefoxDriver();
-            } else {
-                DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
-                String seleniumBrowser = "firefox";//System.getenv("SELENIUM_BROWSER");
-                if (!Strings.isNullOrEmpty(seleniumBrowser)) {
-                    desiredCapabilities.setBrowserName(seleniumBrowser);
-                }
-                final String seleniumVersion = "41";//System.getenv("SELENIUM_VERSION");
-                if (!Strings.isNullOrEmpty(seleniumVersion)) {
-                    desiredCapabilities.setVersion(seleniumVersion);
-                }
-
-                final String seleniumPlatform = "win7";//System.getenv("SELENIUM_PLATFORM");
-                if (!Strings.isNullOrEmpty(seleniumPlatform)) {
-                    desiredCapabilities.setCapability(CapabilityType.PLATFORM, seleniumPlatform);
-                }
-                final String sauceUrl = String.format("http://%s:%s@ondemand.saucelabs.com:80/wd/hub", username, accessKey);
-                System.out.println(sauceUrl);
-                try {
-                    driver = new RemoteWebDriver(
-                            new URL(sauceUrl),
-                            desiredCapabilities);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            }*/
+            driver = new FirefoxDriver();
+           
             driver.manage().window().maximize();
-}
+            driver.manage().timeouts().implicitlyWait(Long.parseLong(ConfigProperties.getProperty("impl.wait")), TimeUnit.SECONDS);
+        }
 
         @AfterSuite
         public void tearDownTest() {
@@ -83,6 +47,12 @@ import java.util.concurrent.TimeUnit;
             }
             return driver;
         }
+
+    public void setDriver(WebDriver driver) {
+        this.driver = driver;
+    }
+
+
 
     public int getResponseCode(String siteUrl) {
         int statusCode;
